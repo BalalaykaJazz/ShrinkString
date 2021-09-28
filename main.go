@@ -13,11 +13,9 @@ import (
 type LettersCountMap map[int32]int
 type SortedKeysSlice []int32
 
+// getLetterCount возвращает map с ключем в формате rune
+// и количеством повторений символов в качестве значения.
 func getLetterCount(s string) LettersCountMap {
-	// Функция возвращает map следующего вида:
-	// ключ - символ строки в формате rune
-	// значение - количество повторений символа.
-
 	counter := make(LettersCountMap)
 
 	for _, value := range s {
@@ -27,24 +25,23 @@ func getLetterCount(s string) LettersCountMap {
 	return counter
 }
 
+// Len Реализация интерфейса для сортировки SortedKeysSlice.
 func (f SortedKeysSlice) Len() int {
-	// Реализация интерфейса для сортировки SortedKeysSlice.
 	return len(f)
 }
 
+// Less Реализация интерфейса для сортировки SortedKeysSlice.
 func (f SortedKeysSlice) Less(i, j int) bool {
-	// Реализация интерфейса для сортировки SortedKeysSlice.
 	return f[i] < f[j]
 }
 
+// Swap Реализация интерфейса для сортировки SortedKeysSlice.
 func (f SortedKeysSlice) Swap(i, j int) {
-	// Реализация интерфейса для сортировки SortedKeysSlice.
 	f[i], f[j] = f[j], f[i]
 }
 
+// getSortedKeys возвращает slice с отсортированными ключами LettersCountMap.
 func getSortedKeys(counter LettersCountMap) SortedKeysSlice {
-	// Функция возвращает slice с отсортированными ключами LettersCountMap.
-
 	keys := make(SortedKeysSlice, 0, len(counter))
 	for k := range counter {
 		keys = append(keys, k)
@@ -54,9 +51,8 @@ func getSortedKeys(counter LettersCountMap) SortedKeysSlice {
 	return keys
 }
 
-func CreateAnswer(counter LettersCountMap, keys SortedKeysSlice) string {
-	// Функция создает строку ответа в формате: <Символ><Число вхождений>...
-
+// CreateAnswer создает строку ответа в формате: <Символ><Число вхождений>...
+func createAnswer(counter LettersCountMap, keys SortedKeysSlice) string {
 	var finalString strings.Builder
 
 	for _, k := range keys {
@@ -66,20 +62,18 @@ func CreateAnswer(counter LettersCountMap, keys SortedKeysSlice) string {
 	return finalString.String()
 }
 
+// ShrinkString получает исходную строку в качестве параметра и возвращает преобразованную
+// строку с использованными символами и их количеством. Например: aabbccc -> a2b2c3
 func ShrinkString(s string) string {
-	// Функция получает строку в качестве параметра и возвращает преобразованную
-	// строку с использованными символами и их количеством.
-	// Например: aabbccc -> a2b2c3
-
 	count := getLetterCount(s)
 	keys := getSortedKeys(count)
 
-	return CreateAnswer(count, keys)
+	return createAnswer(count, keys)
 }
 
 func main() {
 
-	fmt.Print("Enter a string: ")
+	fmt.Print("Введите строку: ")
 	reader := bufio.NewReader(os.Stdin)
 	input, err := reader.ReadString('\n')
 	if err != nil {
